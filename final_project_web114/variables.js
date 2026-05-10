@@ -22,6 +22,9 @@ export const gameVariables = {
   startBtn: null,
   startBtnId: "startGame",  // #startGame div btn
 
+  // game over 
+  gameOver: false,
+
   // action button things | orinally going to use this further. But I can't figure out how to properly loop through an array looking for certain ID's
   // and changing buttons per ID - Now just setting to True / false reading for them being 'set'
   actionBtns: false,

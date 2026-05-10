@@ -139,14 +139,22 @@ export function updatePlayer(type) {
         }
         // deal the damage to the enemy
         gameVariables.enemyStats.health -= dmg;
+        // check if the enemy died | 59 and below === failed/dead
+        if (gameVariables.enemyStats.health <= 59) {
+            updateLogs(gameVariables.enemyStats.name + " has failed! You totally showed him! You're a real scholar,");
+            // change gameOver to true
+            gameVariables.gameOver = true;
+            finishTurn();  
+        }
+        else {
+          // if block occured | outut this
+          if (blocked) updateLogs(gameVariables.playerStats.name + ' did ' + dmg + ' damage!' + ` (${initDmg} total)`, 0, "playerSaying");
+          // if no blocking occured
+          else updateLogs(gameVariables.playerStats.name + ' did ' + dmg + ' damage!', 0, "playerSaying");
 
-        // if block occured | outut this
-        if (blocked) updateLogs(gameVariables.playerStats.name + ' did ' + dmg + ' damage!' + ` (${initDmg} total)`, 0, "playerSaying");
-        // if no blocking occured
-        else updateLogs(gameVariables.playerStats.name + ' did ' + dmg + ' damage!', 0, "playerSaying");
-
-        //finish layers turn
-        finishTurn();
+          //finish layers turn
+          finishTurn();
+        }
       }
 
       // apply block to your character | blocks the enemies next attack X amount
@@ -179,12 +187,16 @@ export function updatePlayer(type) {
         // grab the buttons array
         const buttons = gameVariables.actionBtsArray;
 
+        // disable them from being clicked
         buttons.forEach((button) => { 
           button.disabled = true; 
+          // removing the evnt listeners to prevent doubling the next time around 
+          // there has to be a better way to do this. But I could not figure it out | tried { once: true } on the buttons aboove, nada. 
           button.removeEventListener('click', detectButton);
         });
       }
 
+      // finalizes the players turn and refreshes stats
       function finishTurn() {
 
         // update players stats immediately

@@ -1,11 +1,10 @@
 // ADDITIONAL NOTES
 
-  // I just want to say I am actually so happy with how this is coming together so far
-  // this feels like one of my first more 'properly' coded things
-  // I have made a handful of crappy JS games for codeJams lately but this feels much more polished
-
-  // heres a link to a 'skip ad' game I made for a Kitboga codeJam (the code is attrocious 
-  // (see submission.html), but its cool to see where im improving) - https://swangmane.github.io/BogaJam-2026/
+  // 
+  // 
+  // 
+  //  
+  // 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -28,23 +27,28 @@ import { popUp } from './popup.js';
 ///                                             ///
 ///////////////////////////////////////////////////
 
-// if startBtn is null - set it using the given ID
+// on initial load
+// if startBtn is undefined - set it using the given ID
 if (!gameVariables.startBtn) gameVariables.startBtn = document.getElementById(gameVariables.startBtnId); 
-else console.log("error finding start button"); // error logger - should never trigger
+else console.log("error finding start button"); // error logger - should never trigger | page will not work on this failing
 
 // link the start button to startGame
 gameVariables.startBtn.addEventListener('click', () => {
+  // hide the start button once clicked | Not used again
   gameVariables.startBtn.style.display = 'none';
   setupGame();
 })
 
-
+/////////////////////////////////////////////////////////
+//
+//
+//
 // game setup | gets everything setup and variables set
 export async function setupGame() {
 
   // initial log
   updateLogs("Starting game", 0, "gameLogs");
-  // initial updates
+  // initial updates to set variables before actual game starts
   updatePlayer();
   updateEnemy();
 
@@ -57,8 +61,10 @@ export async function setupGame() {
   // run the first gameLoop
   gameLoop();
 }
-
-// runs everytime the player uses a button
+/////////////////////////////////////////////////////
+//
+//
+// main logic of the game
 export async function gameLoop() {
   // grab each of the players buttons for detection
   const buttons = gameVariables.actionBtsArray;
@@ -66,6 +72,12 @@ export async function gameLoop() {
   // keeps the players/enemies stats updating
   updateEnemy("stats");
   updatePlayer("stats");
+
+  // if the game is over, leave the function after updating players
+  if (gameVariables.gameOver) {
+    popUp("gameOver");
+    return;
+  }; 
 
   // if its not the users turn
   if (!gameVariables.userTurn) {
@@ -78,8 +90,8 @@ export async function gameLoop() {
   else if (gameVariables.userTurn) {
     // disable the buttons
     buttons.forEach((button) => { button.disabled = false; });
+    // wait for updatePlayer | (users turn)
     await updatePlayer();
-    console.log("player done | main loop");
   }
   
   // increase the turn number each turn

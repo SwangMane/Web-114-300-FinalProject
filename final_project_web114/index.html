@@ -7,6 +7,8 @@
   <!-- MAIN STYLE SHEET | Did not see requirements for it to be seperate file so keeping it inline -->
   <!-- Will only work on Desktop | hiding gameWrapper if screen < 1600px -->
 
+  <!-- I stopped commenting out CSS.. This got out of hand.. -->
+
   <!-- i'm really bad at UI so this will not look pretty. But should have everything needed assignment wise -->
     <style>
 
@@ -36,6 +38,27 @@
         align-items: center;
 
         background: #919599;
+      }
+      #continuousTitle {
+        position: absolute;
+
+        z-index: 800;
+
+        top: 0;
+
+        font-size: 6rem;
+        text-shadow: 0 0 2px 4px black;
+
+        box-shadow: 0 0 4px 10px rgb(0, 0, 0, 0.5),
+                    inset 0 0 1px 1px black,
+                    inset 0 0 4px 4px #FBA45C;
+
+        background:  #FBA45C;
+
+        padding: 1rem 12rem;
+        border-radius: 32px;
+
+        color: black;
       }
       #gameWrapper {
         width: 1400px;
@@ -166,10 +189,18 @@
                     inset 0 0 1px 1px black,
                     inset 0 0 1px 4px white,
                     inset 0 0 1px 6px black;  
-                    
+        
         padding: 16px; 
         
         box-sizing: border-box;
+      }
+      #gameOverWrap {
+        display: none;
+
+        flex-direction: column;
+      }
+      #reloadPage {
+        font-size: 2rem;
       }
     /* "Game Logs" heading */
       #logWrap h1 {
@@ -418,6 +449,8 @@
     </style>
   </head>
   <body>
+    <h1 id="continuousTitle">Scholar Arena</h1>
+    <!-- heads or tails wrapper -->
     <div id="popupWrapper" class="flexed">
       <div id="headsOrTailsWrap" class="popupWrap">
         <h1 id="hortSaying"></h1>
@@ -426,7 +459,10 @@
           <button id="headsBtn">Heads</button>
           <button id="tailsBtn">Tails</button>
         </div>
-
+      </div>
+      <div id="gameOverWrap" class="popupWrap">
+        <h1>Game over</h1>
+        <button id="reloadPage" onclick="window.location.reload();">Restart Game</button> <!-- last button seen on screen | reloads page -->
       </div>
     </div>
     <div id="gameWrapper">

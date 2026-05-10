@@ -6,7 +6,7 @@ import { updatePlayer } from './player.js';
 
 ///////////////////////////////////////////////////
 ///                                             ///
-///                PLAYER.JS                    ///
+///                ENEMY.JS                     ///
 ///                                             ///
 ///     - SETS ALL ENEMY VARIABLES              ///
 ///     - HANDLES ENEMY STAT UPDATES            ///
@@ -106,7 +106,7 @@ export async function updateEnemy(type) {
   })
 
   // 'AI' function for the enemy | Not sure of the best way to do this. 
-  // Just using branching logic to determine turn type
+  // Just using branching logic to determine turn type | gets a little messy
   async function enemyAI() {
     console.log("Enemy AI running");
     // wait for decision
@@ -128,86 +128,136 @@ export async function updateEnemy(type) {
         const block = gameVariables.enemyStats.block; 
         // always grab a heal number to use later if needed
         const heal = Math.floor(Math.random() * (gameVariables.enemyStats.healMax - gameVariables.enemyStats.healMin) + gameVariables.enemyStats.healMin);
-        // all %'s are chance levels
         //
-        // enemyHealth >= enemyHealthMax | (100%) deal damage
+        //
+    ////////////////////////////////////////////////////////// 
+        //
+        // All %'s are chance levels
+        //
+        // enemyHealth >= enemyHealthMax | near 100% chance to deal damage
         if (gameVariables.enemyStats.health >= gameVariables.enemyStats.healthMax) {
-          damagePlayer();
+          const randNum = randomNumber(0, 100);
+          // 80% damage
+          if (randNum <= 80) {
+            damagePlayer();
+          }
+          else {
+            // 20% heal
+            enemyHeal();
+          }
         }
-        // enemmyHealth >= 9/10 enemyHealthMax | (70%) deal damage, (15%) heal, (15%) block 
+    ///////////////////////////////////////////////////////////////////////////////////////
+        //
+        // enemmyHealth >= 9/10 enemyHealthMax | (80%) deal damage, (10%) heal, (10%) block 
+        //
         else if (gameVariables.enemyStats.health >= (gameVariables.enemyStats.healthMax * 0.9)) {
           const randNum = randomNumber(0, 100);
-          // 70% damage chance
-          if (randNum <= 70) {
+          // 80% damage chance
+          if (randNum <= 80) {
             // damage player
             damagePlayer();
           }
-          // 15% block chance
-          else if (70 < randNum && randNum < 85) {
+          // 10% block chance
+          else if (80 < randNum && randNum < 90) {
             // generate block
             enemyBlock();
           }
-          // 15% heal chance
+          // 10% heal chance
           else {
             // heal enemy
             enemyHeal();
           }
         }
-        // 9/10 enemyHealthMax > enemmyHealth >= 8/10 enemyHealthMax | (50%) deal damage, (25%) heal, (25%) block 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //
+        // 9/10 enemyHealthMax > enemmyHealth >= 8/10 enemyHealthMax | (60%) deal damage, (20%) heal, (20%) block
+        //
         else if (gameVariables.enemyStats.health < (gameVariables.enemyStats.healthMax * 0.9) && (gameVariables.enemyStats.health >= (gameVariables.enemyStats.healthMax * 0.8))) {
           const randNum = randomNumber(0, 100);
-          // 50% damage chance
-          if (randNum <= 50) {
+          // 60% damage chance
+          if (randNum <= 60) {
             // damage player
             damagePlayer();
           }
-          // 25% block chance
-          else if (50 < randNum && randNum < 75) {
+          // 20% block chance
+          else if (60 < randNum && randNum < 80) {
             // generate block
             enemyBlock();
           }
-          // 25% heal chance
+          // 20% heal chance
           else {
             // heal enemy
             enemyHeal();
           }
         }
-        // 8/10 enemyHealthMax > enemmyHealth >= 7/10 enemyHealthMax | (30%) deal damage, (35%) heal, (35%) block 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //
+        // 8/10 enemyHealthMax > enemmyHealth >= 7/10 enemyHealthMax | (40%) deal damage, (30%) heal, (30%) block
+        //
         else if (gameVariables.enemyStats.health < (gameVariables.enemyStats.healthMax * 0.8) && (gameVariables.enemyStats.health >= (gameVariables.enemyStats.healthMax * 0.7))) {
           const randNum = randomNumber(0, 100);
-          // 30% damage chance
-          if (randNum <= 30) {
-            // damage player
-            damagePlayer();
+          // if the players health is lower then the bots | stay mostly aggressive
+          if (gameVariables.enemyStats.health > gameVariables.playerStats.health) {
+            // 70% chance to damage
+            if (randNum >= 30) {
+              damagePlayer();
+            }
+            // 30% chance to heal
+            else {
+              enemyHeal();
+            }
           }
-          // 35% block chance
-          else if (30 < randNum && randNum < 65) {
-            // generate block
-            enemyBlock();
-          }
-          // 35% heal chance
           else {
-            // heal enemy
-            enemyHeal();
+            // 40% damage chance
+            if (randNum <= 40) {
+              // damage player
+              damagePlayer();
+            }
+            // 30% block chance
+            else if (40 < randNum && randNum < 70) {
+              // generate block
+              enemyBlock();
+            }
+            // 30% heal chance
+            else {
+              // heal enemy
+              enemyHeal();
+            }
           }
         }
-        // 7/10 enemyHealthMax > enemmyHealth >= 6/10 enemyHealthMax | (20%) deal damage, (50%) heal, (30%) block 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //
+        // 7/10 enemyHealthMax > enemmyHealth >= 6/10 enemyHealthMax | (20%) deal damage, (50%) heal, (30%) block
+        //
         else if (gameVariables.enemyStats.health < (gameVariables.enemyStats.healthMax * 0.7) && (gameVariables.enemyStats.health >= (gameVariables.enemyStats.healthMax * 0.6))) {
           const randNum = randomNumber(0, 100);
-          // 30% damage chance
-          if (randNum <= 20) {
-            // damage player
-            damagePlayer();
+          // if the players health is lower then the bots | stay mostly aggressive
+          if (gameVariables.enemyStats.health > gameVariables.playerStats.health) {
+            // 50% chance to damage
+            if (randNum >= 50) {
+              damagePlayer();
+            }
+            // 50% chance to heal
+            else {
+              enemyHeal();
+            }
           }
-          // 35% block chance
-          else if (20 < randNum && randNum < 50) {
-            // generate block
-            enemyBlock();
-          }
-          // 35% heal chance
           else {
-            // heal enemy
-            enemyHeal();
+            // 30% damage chance
+            if (randNum <= 20) {
+              // damage player
+              damagePlayer();
+            }
+            // 35% block chance
+            else if (20 < randNum && randNum < 50) {
+              // generate block
+              enemyBlock();
+            }
+            // 35% heal chance
+            else {
+              // heal enemy
+              enemyHeal();
+            }
           }
         }
 
@@ -251,12 +301,21 @@ export async function updateEnemy(type) {
 
           // deal damage to the player
           gameVariables.playerStats.health -= dmg;
-          // if block occured | outut this
-          if (blocked) updateLogs(gameVariables.enemyStats.name + ' did ' + dmg + ' damage!' + ` (${initDmg} total)`, 0, "enemySaying");
-          // if no blocking occured
-          else updateLogs(gameVariables.enemyStats.name + ' did ' + dmg + ' damage!', 0, "enemySaying");
-          // call to resolve
-          enemyDone2() 
+          // check if the player died | 59 and below === failed/dead
+          if (gameVariables.playerStats.health <= 59) {
+            updateLogs(gameVariables.playerStats.name + ' has failed! What a shame.. Better luck next time.');
+            // change gameOver to true
+            gameVariables.gameOver = true;
+            enemyDone2()
+          }
+          else {
+            // if block occured | outut this
+            if (blocked) updateLogs(gameVariables.enemyStats.name + ' did ' + dmg + ' damage!' + ` (${initDmg} total)`, 0, "enemySaying");
+            // if no blocking occured
+            else updateLogs(gameVariables.enemyStats.name + ' did ' + dmg + ' damage!', 0, "enemySaying");
+            // call to resolve
+            enemyDone2() 
+          }
         }
 
         // block function 
@@ -290,5 +349,4 @@ export async function updateEnemy(type) {
     // update the players heal variance amount
     gameVariables.enemyStats.healNumDiv.textContent = `(${gameVariables.enemyStats.healMin} - ${gameVariables.enemyStats.healMax})`;
   }
-
 }

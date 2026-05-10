@@ -26,11 +26,11 @@ export async function popUp(popup, phrase, delay) {
 
       // if popup is open, close it. if its open, close it
       if (gameVariables.popupOpen) {
-        gameVariables.popupWrapDiv.style.display = 'none';
+        gameVariables.popupWrapDiv.style.display = 'none'; // close it
         gameVariables.popupOpen = false
       }
       else {
-        gameVariables.popupWrapDiv.style.display = 'flex';
+        gameVariables.popupWrapDiv.style.display = 'flex'; // open it
         gameVariables.popupOpen = true;
       }
     }
@@ -118,6 +118,7 @@ export async function popUp(popup, phrase, delay) {
                 if (randNum === heads) gameVariables.popupCoinDiv.innerHTML = `<h1 class="actualCoin">Heads</h1>`;
                 else if (randNum === tails) gameVariables.popupCoinDiv.innerHTML = `<h1 class="actualCoin">Tails</h1>`;
               }
+              // if the coin is stil not decided | 'animate'
               if (!coinDecided) {
                 // if i is even 
                 if (i % 2 === 0) {
@@ -129,6 +130,7 @@ export async function popUp(popup, phrase, delay) {
                 }
                 i++
                 setTimeout(() => {
+                  // run every 1/10 of a second 
                   requestAnimationFrame(coinFlipAnimation);
                 }, 100);
               }
@@ -176,6 +178,8 @@ export async function popUp(popup, phrase, delay) {
               else updateLogs(`(${gameVariables.enemyStats.name} won the coinflip)` + gameVariables.sayings.botFirst, 1000, "enemySaying");
 
               setTimeout(() => {
+                // hide the hortscreen
+                hortWrap.style.display = 'none';
                 // finish the await sync here for heads or tails 
                 resolve();
               }, gameVariables.sayings.delay);
@@ -191,11 +195,12 @@ export async function popUp(popup, phrase, delay) {
         // log the start of the menu
         console.log("opening game over menu");
 
+        // grab the game over div 
+        const gameOverWrapDiv = document.getElementById("gameOverWrap");
+        gameOverWrapDiv.style.display = 'flex'; // display it for once openPopup runs
+
         // call to open the popup menu
         openPopup();
-
-
-
 
         break;
       case "example":
